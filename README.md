@@ -1,73 +1,209 @@
-# Welcome to your Lovable project
+# GearGuard – Smart Maintenance Management Module
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**GearGuard** is a structured maintenance management module designed to help organizations track assets, assign responsibility, and manage corrective and preventive maintenance workflows.
 
-## How can I edit this code?
+This module is built with a **database-first, workflow-driven approach**, following ERP principles rather than rapid-prototype shortcuts. The focus is on clean data modeling, modular logic, and real-world operational behavior.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## Core Philosophy
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+GearGuard is built around three tightly connected but clearly separated entities:
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Equipment** – What needs maintenance  
+- **Maintenance Teams** – Who is responsible  
+- **Maintenance Requests** – The work being performed  
 
-**Use your preferred IDE**
+Each entity has a well-defined role and drives automation across the system.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Functional Modules
 
-Follow these steps:
+### 1. Equipment Management
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Acts as the master data layer for all company assets.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**Key Capabilities**
+- Track equipment by:
+  - Department
+  - Assigned Employee
+- Default maintenance responsibility assignment
+- Physical location tracking
+- Warranty and purchase information
+- Logical lifecycle management (Active / Scrapped)
 
-# Step 3: Install the necessary dependencies.
-npm i
+**Key Fields**
+- Equipment Name  
+- Serial Number  
+- Department / Employee Owner  
+- Default Maintenance Team  
+- Default Technician  
+- Purchase Date  
+- Warranty Details  
+- Physical Location  
+- Usability Status  
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+### 2. Maintenance Team Management
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Defines specialized operational teams and enforces responsibility boundaries.
 
-**Use GitHub Codespaces**
+**Key Capabilities**
+- Create multiple teams (e.g., Mechanics, Electricians, IT Support)
+- Assign technicians (users) to teams
+- Restrict request assignment visibility to relevant teams only
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+This ensures that maintenance requests are handled only by qualified personnel.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+### 3. Maintenance Request Management
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Handles the entire lifecycle of a maintenance job.
 
-## How can I deploy this project?
+**Request Types**
+- **Corrective** – Unplanned breakdowns  
+- **Preventive** – Scheduled routine maintenance  
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+**Key Fields**
+- Subject / Issue Description  
+- Equipment  
+- Request Type  
+- Maintenance Team (auto-filled)  
+- Assigned Technician  
+- Scheduled Date (Preventive)  
+- Duration / Hours Spent  
+- Request State  
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## Business Workflows
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Flow 1: Breakdown (Corrective Maintenance)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Any user creates a maintenance request  
+2. Selecting equipment automatically:
+   - Fetches equipment category  
+   - Assigns default maintenance team  
+3. Request starts in **New** state  
+4. Technician or manager assigns the request  
+5. Work begins → state moves to **In Progress**  
+6. Technician records actual duration  
+7. Request is completed → state moves to **Repaired**
+
+---
+
+### Flow 2: Routine Checkup (Preventive Maintenance)
+
+1. Manager creates a preventive request  
+2. Scheduled date is defined  
+3. Request appears automatically in **Calendar View**  
+4. Technicians can plan work in advance  
+5. Execution follows the same lifecycle as corrective requests  
+
+---
+
+## User Interface & Views
+
+### Maintenance Kanban Board
+
+- Grouped by request state:
+  - New  
+  - In Progress  
+  - Repaired  
+  - Scrap  
+- Drag-and-drop stage transitions  
+- Visual indicators:
+  - Assigned technician avatar  
+  - Overdue requests highlighted  
+
+---
+
+### Calendar View
+
+- Displays preventive maintenance requests only  
+- Allows scheduling new requests directly from calendar  
+- Improves planning and workload visibility  
+
+---
+
+### Reports (Optional)
+
+- Pivot / Graph views  
+- Requests grouped by:
+  - Maintenance Team  
+  - Equipment Category  
+
+---
+
+## Automation & Smart Features
+
+### Smart Button – Equipment Form
+
+- **Maintenance** button on each equipment record  
+- Opens only maintenance requests related to that equipment  
+- Displays badge count of open requests  
+
+---
+
+### Scrap Logic
+
+- Moving a request to **Scrap**:
+  - Logically marks the equipment as unusable  
+  - Preserves historical data  
+  - Prevents further operational use  
+
+No records are deleted; all actions remain auditable.
+
+---
+
+## Technical Principles Followed
+
+- Database-first design (Relational Modeling)  
+- Modular architecture  
+- Minimal third-party dependency usage  
+- Clear separation of:
+  - Data models  
+  - Business logic  
+  - UI layers  
+- Real-world data flows (no static mocks)  
+- Graceful input validation and error handling  
+- Team-based Git collaboration  
+
+---
+
+## Evaluation Alignment
+
+This module is designed to align with the following evaluation criteria:
+
+- Logical thinking and problem approach  
+- Clean and scalable database design  
+- Modular and readable code structure  
+- Workflow correctness  
+- Usability and UI clarity  
+- Performance awareness  
+- Team collaboration and ownership  
+
+---
+
+## Team Contribution
+
+All team members actively contributed to:
+- System design  
+- Business logic  
+- Implementation  
+- Testing  
+- Presentation  
+
+This project reflects shared ownership and collaborative development.
+
+---
+
+## Conclusion
+
+GearGuard is not just a maintenance tracker.  
+It is a workflow-centric, ERP-style system designed to demonstrate practical software engineering skills, clean architecture, and real-world problem solving.
